@@ -7,21 +7,32 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastrcture.Services;
+using ApplicationCore.ServiceInterfaces;
 namespace MovieShopMVC.Controllers
 {
     public class HomeController : Controller
     {
         
-        private MovieService _movieService;
-        public HomeController()
+        private IMovieService _movieService;
+
+        //IMovieService m = new MovieService();
+        //3 ways to 
+        //Constuctor Injection
+        //Method Injection
+        //Property Injection
+        public HomeController(IMovieService movieService)
         {
-            _movieService = new MovieService();
+            _movieService = movieService;
         }
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
-
-            var movies = _movieService.GetTopRevenueMovies();
+            // Question
+            // which one is better do async/await here or in MovieService
+            // (since we are accessing database from there)
+            var GetMoviesTask = Task.Run(() => _movieService.GetTopRevenueMovies());
+            var movies = await GetMoviesTask;
+            //var movies =    _movieService.GetTopRevenueMovies();
             // 3 ways to pass data from controller to views
             // 1.Strongly Typed Models
             // 2.ViewBag

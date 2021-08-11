@@ -1,3 +1,5 @@
+using ApplicationCore.ServiceInterfaces;
+using Infrastrcture.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,12 +20,30 @@ namespace MovieShopMVC
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            // 3 Scopes to perform Dependency injection
+            // AddScoped => creat an instance per http request and reuse within that http request
+            // AddTransient => create an instance for every new access
+            // AddSingleton => one instance through out the application lifecycle
+
+            //AddScoped
+            // 10:00 AM User1 => HomeController => movieserviceinstance 1
+            // 10:04 AM User2 => HomeController => movieserviceinstance 2, MoviesController => movieservice 2
+
+            //AddTransient
+            // 10:00 AM User1 => HomeController => movieserviceinstance 1
+            // 10:04 AM User2 => HomeController => movieserviceinstance 2, MoviesController => movieservice 3
+
+            //AddSingleton
+            // 10:00 AM User1 => HomeController => movieserviceinstance 1
+            // 10:03 AM User2 => HomeController => movieserviceinstance 1
+            services.AddScoped<IMovieService, MovieService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

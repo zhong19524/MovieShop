@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ApplicationCore.Models;
 using ApplicationCore.ServiceInterfaces;
-namespace Infrastrcture.Services
+using System.Threading.Tasks;
+namespace Infrastrcture.Services;
 {
     public class MovieService : IMovieService
     {
@@ -22,6 +23,8 @@ namespace Infrastrcture.Services
 
             };
             return movies;
+
+
         }
     }
 }
