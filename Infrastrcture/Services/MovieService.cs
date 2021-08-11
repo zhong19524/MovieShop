@@ -4,7 +4,7 @@ using System.Text;
 using ApplicationCore.Models;
 using ApplicationCore.ServiceInterfaces;
 using System.Threading.Tasks;
-namespace Infrastrcture.Services;
+namespace Infrastrcture.Services
 {
     public class MovieService : IMovieService
     {
