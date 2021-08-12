@@ -112,20 +112,20 @@ namespace Infrastrcture.Data
             private void ConfigureUser(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User");
-            builder.HasKey(cr => cr.Id);
-            builder.Property(cr => cr.FirstName).HasMaxLength(128);
-            builder.Property(cr => cr.LastName).HasMaxLength(128);
-            builder.Property(cr => cr.DateOfBirth);
-            builder.Property(cr => cr.Email).HasMaxLength(256);
-            builder.Property(cr => cr.HashedPassword).HasMaxLength(1024);
-            builder.Property(cr => cr.Salt).HasMaxLength(1024);
-            builder.Property(cr => cr.PhoneNumber).HasMaxLength(16);
+            builder.HasKey(u => u.Id);
+            builder.Property(u => u.FirstName).HasMaxLength(128);
+            builder.Property(u => u.LastName).HasMaxLength(128);
+            builder.Property(u => u.DateOfBirth);
+            builder.Property(u => u.Email).HasMaxLength(256);
+            builder.Property(u => u.HashedPassword).HasMaxLength(1024);
+            builder.Property(u => u.Salt).HasMaxLength(1024);
+            builder.Property(u => u.PhoneNumber).HasMaxLength(16);
             //The property 'User.TwoFactorEnabled' cannot be marked as nullable/optional 
             //because the type of the property is 'bool' which is not a nullable type.
             //Any property can be marked as non-nullable/required, but only properties
             //of nullable types can be marked as nullable/optional.
-            builder.Property(cr => cr.TwoFactorEnabled);
-            builder.Property(cr => cr.LockoutEndDate);
+            builder.Property(u => u.TwoFactorEnabled);
+            builder.Property(u => u.LockoutEndDate);
             builder.Property(u => u.LastLoginDateTime);
             builder.Property(u => u.IsLocked);
             builder.Property(u => u.AccessFailedCount);
