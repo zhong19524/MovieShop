@@ -30,15 +30,17 @@ namespace MovieShopMVC.Controllers
             // Question
             // which one is better do async/await here or in MovieService
             // (since we are accessing database from there)
-            var GetMoviesTask = Task.Run(() => _movieService.GetTopRevenueMovies());
-            var movies = await GetMoviesTask;
-            //var movies =    _movieService.GetTopRevenueMovies();
+            //var GetMoviesTask = Task.Run(() => _movieService.GetTopRevenueMovies());
+            //var movies = await GetMoviesTask;
+
+
+            var movies =  await _movieService.GetTopRevenueMovies();
             // 3 ways to pass data from controller to views
             // 1.Strongly Typed Models
             // 2.ViewBag
             // 3.ViewData
-            ViewBag.PageTitle = "TOP Revenue Movies";
-            ViewData["TotalMovies"] = movies.Count();
+            //ViewBag.PageTitle = "TOP Revenue Movies";
+            //ViewData["TotalMovies"] = movies.Count();
 
             return View(movies);
         }

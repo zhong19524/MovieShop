@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastrcture.Data;
 using Microsoft.EntityFrameworkCore;
+using ApplicationCore.RepositoryInterfaces;
+using Infrastrcture.Repository;
 
 namespace MovieShopMVC
 {
@@ -46,6 +48,7 @@ namespace MovieShopMVC
             // 10:00 AM User1 => HomeController => movieserviceinstance 1
             // 10:03 AM User2 => HomeController => movieserviceinstance 1
             services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
 
             services.AddDbContext<MovieShopDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("MovieShopDbConnection"))

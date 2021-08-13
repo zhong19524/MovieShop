@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using ApplicationCore.Models;
 namespace ApplicationCore.ServiceInterfaces
 {
     public interface IMovieService
     {
-        List<MovieCardResponseModel> GetTopRevenueMovies();
+        Task<List<MovieCardResponseModel>> GetTopRevenueMovies();
         
     }
 }
