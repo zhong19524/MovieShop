@@ -33,11 +33,17 @@ namespace Infrastrcture.Data
         public DbSet<Trailer> Trailers { get; set; }
 
         public DbSet<Cast> Casts { get; set; }
+        public DbSet<MovieCast> MovieCasts { get; set; }
 
         public DbSet<Crew> Crews { get; set; }
+        public DbSet<MovieCrew> MovieCrews { get; set; }
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Movie>(ConfigureMovie);
@@ -68,8 +74,8 @@ namespace Infrastrcture.Data
         {
             builder.ToTable("UserRole");
             builder.HasKey(ur => new { ur.UserId, ur.RoleId });
-            builder.HasOne(ur => ur.User).WithMany().HasForeignKey(ur => ur.UserId);
-            builder.HasOne(ur => ur.User).WithMany().HasForeignKey(ur => ur.UserId);
+            builder.HasOne(ur => ur.User).WithMany(ur => ur.UserRoles).HasForeignKey(ur => ur.UserId);
+            builder.HasOne(ur => ur.User).WithMany(ur => ur.UserRoles).HasForeignKey(ur => ur.UserId);
         }
         private void ConfigureRole(EntityTypeBuilder<Role> builder)
         {
@@ -86,8 +92,8 @@ namespace Infrastrcture.Data
             builder.Property(p => p.TotalPrice).HasColumnType("decimal(18,2)");
             builder.Property(p => p.PurchaseDateTime);
             builder.Property(p => p.MovieId);
-            builder.HasOne(p => p.Movie).WithMany().HasForeignKey(p => p.MovieId);
-            builder.HasOne(p => p.User).WithMany().HasForeignKey(p => p.UserId);
+            builder.HasOne(p => p.Movie).WithMany(p=>p.Purchases).HasForeignKey(p => p.MovieId);
+            builder.HasOne(p => p.User).WithMany(p => p.Purchases).HasForeignKey(p => p.UserId);
         }
         private void ConfigureReview(EntityTypeBuilder<Review> builder)
         {
@@ -95,8 +101,8 @@ namespace Infrastrcture.Data
             builder.HasKey(r => new { r.MovieId, r.UserId });
             builder.Property(r => r.Rating).HasColumnType("decimal(3, 2)");
             builder.Property(r => r.ReviewText).HasMaxLength(4096);
-            builder.HasOne(r => r.Movie).WithMany().HasForeignKey(r => r.MovieId);
-            builder.HasOne(r => r.User).WithMany().HasForeignKey(r => r.UserId);
+            builder.HasOne(r => r.Movie).WithMany(r=>r.Reviews).HasForeignKey(r => r.MovieId);
+            builder.HasOne(r => r.User).WithMany(r=>r.Reviews).HasForeignKey(r => r.UserId);
         }
 
         private void ConfigureFavorite(EntityTypeBuilder<Favorite> builder)
@@ -105,8 +111,8 @@ namespace Infrastrcture.Data
             builder.HasKey(f => new { f.Id });
             builder.Property(f => f.MovieId);
             builder.Property(f => f.UserId);
-            builder.HasOne(f => f.Movie).WithMany().HasForeignKey(f => f.MovieId);
-            builder.HasOne(f => f.User).WithMany().HasForeignKey(f => f.UserId);
+            builder.HasOne(f => f.Movie).WithMany(f => f.Favorites).HasForeignKey(f => f.MovieId);
+            builder.HasOne(f => f.User).WithMany(f => f.Favorites).HasForeignKey(f => f.UserId);
         }
 
             private void ConfigureUser(EntityTypeBuilder<User> builder)
@@ -136,8 +142,8 @@ namespace Infrastrcture.Data
             builder.ToTable("MovieCrew");
             //mcw.Department has data type nvarchar(128) in ER. Here its 450;
             builder.HasKey(mcw => new { mcw.MovieId, mcw.CrewId, mcw.Department, mcw.Job });
-            builder.HasOne(mcw => mcw.Movie).WithMany().HasForeignKey(mcw => mcw.MovieId);
-            builder.HasOne(mcw => mcw.Crew).WithMany().HasForeignKey(mcw => mcw.CrewId);
+            builder.HasOne(mcw => mcw.Movie).WithMany(mcw=>mcw.MovieCrews).HasForeignKey(mcw => mcw.MovieId);
+            builder.HasOne(mcw => mcw.Crew).WithMany(mcw => mcw.MovieCrews).HasForeignKey(mcw => mcw.CrewId);
         }
         private void ConfigureCrew(EntityTypeBuilder<Crew> builder)
         {
@@ -152,8 +158,8 @@ namespace Infrastrcture.Data
         {
             builder.ToTable("MovieCast");
             builder.HasKey(mc => new { mc.MovieId, mc.CastId, mc.Character });
-            builder.HasOne(mc => mc.Movie).WithMany().HasForeignKey(mc => mc.MovieId);
-            builder.HasOne(mc => mc.Cast).WithMany().HasForeignKey(mc => mc.CastId);
+            builder.HasOne(mc => mc.Movie).WithMany(mc => mc.MovieCasts).HasForeignKey(mc => mc.MovieId);
+            builder.HasOne(mc => mc.Cast).WithMany(mc =>mc.MovieCasts).HasForeignKey(mc => mc.CastId);
         }
         private void ConfigureCast(EntityTypeBuilder<Cast> builder)
         {

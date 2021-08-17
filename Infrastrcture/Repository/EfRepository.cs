@@ -31,7 +31,7 @@ namespace Infrastrcture.Repository
             throw new NotImplementedException();
         }
 
-        public virtual async Task<T> GETByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(int id)
         {
             var entity = await _dbContext.Set<T>().FindAsync(id);
             return entity;

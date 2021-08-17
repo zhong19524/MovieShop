@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Entities
+namespace ApplicationCore.Models
 {
-    public class Role
+    public class GenreResponseModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

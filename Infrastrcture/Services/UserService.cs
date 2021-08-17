@@ -22,7 +22,33 @@ namespace Infrastrcture.Services
         }
         public async Task<UserLoginResponseModel> Login(LoginRequestModel model)
         {
-            throw new NotImplementedException();
+
+            var dbUser = await _userRepository.GetUserByEmail(model.Email);
+
+            if (dbUser == null)
+            {
+                return null;
+            }
+            var hashedpassword = GetHashedPassword(model.PassWord, dbUser.Salt);
+
+            if (hashedpassword == dbUser.HashedPassword)
+            {
+                //success login
+                var userLoginResponsModel = new UserLoginResponseModel
+                {
+                    Id = dbUser.Id,
+                    Email = dbUser.Email,
+                    FirstName = dbUser.FirstName,
+                    LastName = dbUser.LastName
+                };
+                return userLoginResponsModel;
+            }
+
+            else
+            {
+                return null;
+            }
+
         }
 
         public async Task<UserRegisterResponseModel> RegisterUser(UserRegisterRequestModel model)

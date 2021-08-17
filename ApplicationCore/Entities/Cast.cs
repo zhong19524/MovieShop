@@ -14,6 +14,6 @@ namespace ApplicationCore.Entities
         public string TmdbUrl { get; set; }
         public string ProfilePath { get; set; }
 
-        //public ICollection<Movie> Movies { get; set; }
+        public ICollection<MovieCast> MovieCasts { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ApplicationCore.RepositoryInterfaces
     {
         // Common CRUD operations
 
-        Task<T> GETByIdAsync(int ID);
+        Task<T> GetByIdAsync(int ID);
 
         Task<IEnumerable<T>> ListAllAsync();
         Task<T> AddAsync(T entity);
