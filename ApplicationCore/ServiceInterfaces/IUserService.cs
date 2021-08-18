@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Models;
+﻿//using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,14 @@ namespace ApplicationCore.ServiceInterfaces
         Task<UserRegisterResponseModel> RegisterUser(UserRegisterRequestModel model);
 
         Task<UserLoginResponseModel> Login(LoginRequestModel model);
+
+        Task<IEnumerable<MovieCardResponseModel>> GetPurchasedMovies(int userId);
+
+        Task<IEnumerable<MovieCardResponseModel>> GetFavorites(int userId);
+
+        //Task<UserRegisterResponseModel> UserProfile(int userId);
+
+        Task<UserProfileResponseModel> GetProfile(int userId);
+
     }
 }

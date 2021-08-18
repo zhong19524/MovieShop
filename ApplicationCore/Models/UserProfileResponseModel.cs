@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Models
 {
-    public class UserRegisterRequestModel
+    public class UserProfileResponseModel
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -14,6 +14,5 @@ namespace ApplicationCore.Models
         public string LastName { get; set; }
 
         public DateTime? DateofBirth { get; set; }
-
     }
 }

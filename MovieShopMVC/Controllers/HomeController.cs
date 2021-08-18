@@ -45,7 +45,10 @@ namespace MovieShopMVC.Controllers
             return View(movies);
         }
 
-
+        public IActionResult Purchased()
+        {
+            return LocalRedirect("~/User/GetAllPurchases");
+        }
 
         public IActionResult Privacy()
         {
