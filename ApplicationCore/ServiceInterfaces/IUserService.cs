@@ -18,7 +18,12 @@ namespace ApplicationCore.ServiceInterfaces
 
         Task<IEnumerable<MovieCardResponseModel>> GetFavorites(int userId);
 
-        //Task<UserRegisterResponseModel> UserProfile(int userId);
+        Task<IEnumerable<ReviewResponseModel>> GetReviews(int userId);
+
+        
+        //Task<FavoriteRequestModel> FavoriteMovie(int userId, int movieId);
+        //Task<ReviewRequestModel> ReviewMovie(int userId, int movieId);
+        
 
         Task<UserProfileResponseModel> GetProfile(int userId);
 

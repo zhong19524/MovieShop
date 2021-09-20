@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastrcture.Services;
 using ApplicationCore.ServiceInterfaces;
+using ApplicationCore.Exceptions;
+
 namespace MovieShopMVC.Controllers
 {
     public class HomeController : Controller
@@ -27,6 +29,7 @@ namespace MovieShopMVC.Controllers
 
         public async Task <IActionResult> Index()
         {
+            //throw new ConflictException("Not Found");
             // Question
             // which one is better do async/await here or in MovieService
             // (since we are accessing database from there)

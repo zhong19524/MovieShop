@@ -1,11 +1,12 @@
-using ApplicationCore.ServiceInterfaces;
-using Infrastrcture.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,15 @@ using Microsoft.EntityFrameworkCore;
 using ApplicationCore.RepositoryInterfaces;
 using Infrastrcture.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MovieShopMVC.Infrastruce;
+using ApplicationCore.ServiceInterfaces;
+using Infrastrcture.Services;
 using ApplicationCore.Entities;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
-namespace MovieShopMVC
+namespace MovieShopAPI
 {
     public class Startup
     {
@@ -27,29 +33,14 @@ namespace MovieShopMVC
             Configuration = configuration;
         }
 
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddControllers();
             services.AddControllersWithViews();
-            // 3 Scopes to perform Dependency injection
-            // AddScoped => creat an instance per http request and reuse within that http request
-            // AddTransient => create an instance for every new access
-            // AddSingleton => one instance through out the application lifecycle
-
-            //AddScoped
-            // 10:00 AM User1 => HomeController => movieserviceinstance 1
-            // 10:04 AM User2 => HomeController => movieserviceinstance 2, MoviesController => movieservice 2
-
-            //AddTransient
-            // 10:00 AM User1 => HomeController => movieserviceinstance 1
-            // 10:04 AM User2 => HomeController => movieserviceinstance 2, MoviesController => movieservice 3
-
-            //AddSingleton
-            // 10:00 AM User1 => HomeController => movieserviceinstance 1
-            // 10:03 AM User2 => HomeController => movieserviceinstance 1
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserService, UserService>();
@@ -60,21 +51,45 @@ namespace MovieShopMVC
             services.AddMemoryCache();
             services.AddScoped<IAsyncRepository<Genre>, EfRepository<Genre>>();
             services.AddScoped<IGenreService, GenreService>();
-            
+            services.AddScoped<IAsyncRepository<Purchase>, EfRepository<Purchase>>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IAsyncRepository<Favorite>, EfRepository<Favorite>>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
+            services.AddScoped<IAsyncRepository<Review>, EfRepository<Review>>();
+            services.AddScoped<IReviewService, ReviewService>();
+
 
             services.AddDbContext<MovieShopDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("MovieShopDbConnection"))
                 );
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+                option =>
                 {
-                    options.Cookie.Name = "MovieShopAuthCookie";
-                    options.ExpireTimeSpan = TimeSpan.FromHours(2);
-                    options.LoginPath = "/Account/Login";
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSecretKey"]))
+                    };
                 });
 
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder =
+                    new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+                defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+            });
+
             services.AddHttpContextAccessor();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieShopAPI", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,16 +97,16 @@ namespace MovieShopMVC
         {
             if (env.IsDevelopment())
             {
-                //
-                //app.UseDeveloperExceptionPage();
-                app.UseMovieShopExceptionMiddleware();
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MovieShopAPI v1"));
             }
-            else
+
+            app.UseCors(builder =>
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                builder.WithOrigins(Configuration.GetValue<string>(key: "clientSPAUrl")).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -101,9 +116,7 @@ namespace MovieShopMVC
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

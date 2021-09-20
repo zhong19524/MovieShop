@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieShopMVC.Controllers
+namespace MovieShopAPI.Controllers
 {
+    [Route("api/[Controller]")]
+    [ApiController]
     public class CastsController : Controller
     {
         private readonly ICastService _castService;
@@ -14,10 +16,14 @@ namespace MovieShopMVC.Controllers
         {
             _castService = castService;
         }
+
+        [Route("Details/{id}")]
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var castdetail = await _castService.GetCastDetailsById(id);
-            return View(castdetail);
+            return Ok(castdetail);
         }
+
     }
 }

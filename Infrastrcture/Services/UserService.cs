@@ -30,7 +30,7 @@ namespace Infrastrcture.Services
                 FirstName = dbUser.FirstName,
                 LastName = dbUser.LastName,
                 Email = dbUser.Email,
-                DateofBirth = dbUser.DateOfBirth
+                DateOfBirth = dbUser.DateOfBirth
             };
             return userprofile;
 
@@ -60,6 +60,19 @@ namespace Infrastrcture.Services
             }
             return movieCards;
         }
+
+        public async Task<IEnumerable<ReviewResponseModel>> GetReviews(int userId)
+        {
+            var reviews = await _userRepository.GetReviewsById(userId);
+            var reviewModels = new List<ReviewResponseModel>();
+            foreach (var review in reviews)
+            {
+                reviewModels.Add(new ReviewResponseModel { Id = review.UserId, FirstName = review.User.FirstName, LastName = review.User.LastName, Rating = review.Rating, ReviewText = review.ReviewText, Title = review.Movie.Title, PosterUrl = review.Movie.PosterUrl });
+            }
+            return reviewModels;
+        }
+
+       
 
         public async Task<UserLoginResponseModel> Login(LoginRequestModel model)
         {

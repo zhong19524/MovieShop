@@ -26,9 +26,11 @@ namespace Infrastrcture.Repository
             return entity;
         }
 
-        public Task<T> DeleteAsync(T entity)
+        public async Task<T> DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
@@ -54,14 +56,16 @@ namespace Infrastrcture.Repository
 
         }
 
-        public Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<T>().Where(filter).ToListAsync();
         }
 
-        public Task<T> UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Update(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
     }
 }

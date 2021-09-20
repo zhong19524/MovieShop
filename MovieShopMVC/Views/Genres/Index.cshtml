@@ -1,0 +1,20 @@
+﻿@model IEnumerable<ApplicationCore.Models.GenreResponseModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Movieshop</h1>
+
+<div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Genrens
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var genre in Model)
+        {
+            <a class="dropdown-item" asp-area="" asp-controller="Genres" asp-action="MoviesByGenres" asp-route-genre="@genre.Name">@genre.Name</a>
+        }
+
+    </div>
+</div>

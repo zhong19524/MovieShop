@@ -6,6 +6,7 @@
 
 <hr />
 <div class="container">
+    <div class="bg-image" style="background-image:url(@Model.BackdropUrl)"></div>
     <div class="row" >
         <div class="col">
             <div class="card mb-4">
@@ -14,12 +15,12 @@
           
         </div>
         <div class="col">
-            <ul class="list-group">
+            <ul class="list-group-item">
                 <li class="font-weight-bold h2">@Model.Title</li>
                 <li>
                     @foreach (var genre in Model.Genres)
                     {
-                       <a href ="#" class="badge badge-dark" rounded-pill>@genre.Name</a>
+                       <a asp-controller="Genres" asp-action="MoviesByGenres" asp-route-id ="@genre.Id" class="badge badge-dark" rounded-pill>@genre.Name</a>
                        //<span class="badge bg-dark" rounded-pill>@genre.Name</span>
                     }
                 </li>
@@ -29,7 +30,7 @@
                 <li>@Model.Overview</li>
             </ul>
         </div>
-        <div class="col">
+        <div class="col-md-2 mt-4">
             <div class="list-group">
                 <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
                     REVIEW
@@ -62,30 +63,42 @@
                 </li>
             </ul>
         </div>
-        <div class="col">
-            <h4>CAST</h4>
-            <ul class="list-group list-group-flush">
-                @foreach (var cast in Model.Casts)
+        <div class="col-6 offset-1">
+            <h5>CAST</h5>
+            <div class="card border-0">
+                @foreach (var cast in Model?.Casts)
                 {
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item col-1 border-left-0"><a asp-controller="Cast" asp-action="Details" asp-route-id="@cast.Id"><img src="@cast.ProfilePath" class="img-fluid" alt="@cast.Name" /></a></li>
+                        <li class="list-group-item col-4 border-left-0">@cast.Name</li>
+                        <li class="list-group-item col-7 border-left-0 border-right-0">@cast.character</li>
+                    </ul>
+                }
+            </div>
+       
+        @*<ul class="list-group list-group-flush">
+            @foreach (var cast in Model.Casts)
+            {
                 <li class="list-group-item">
-                    @*//<a herf="#"><img src="@cast.ProfilePath" class="img-rounded w-auto h-25"></a>@cast.Name @cast.character*@
+
                     <div class="container">
                         <div class="row row-cols-3">
-                            <div class="col w-25 h-auto" >
-                                <a herf="#"><img src="@cast.ProfilePath" class="img-rounded w-auto h-25"></a>
+                            <div class="col w-25 h-auto">
+                                <a asp-controller="Casts" asp-action="Details" asp-route-id="@cast.Id"><img src="@cast.ProfilePath" class="img-rounded w-auto h-25"></a>
                             </div>
                             <div class="col">
-                                <ul >
+                                <ul>
                                     <li class="list-group-item">@cast.Name</li>
                                     <li class="list-group-item">@cast.character</li>
                                 </ul>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </li>
-                }
-            </ul>
-        </div>
+            }
+        </ul>*@
+
+    </div>
         
     </div>
 </div>

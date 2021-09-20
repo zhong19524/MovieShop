@@ -14,6 +14,8 @@ namespace ApplicationCore.RepositoryInterfaces
         Task<IEnumerable<Purchase>> GetPurchasedById(int id);
         Task<IEnumerable<Favorite>> GetFavoriteById(int id);
 
+        //Task<Favo>
+        Task<IEnumerable<Review>> GetReviewsById(int id);
         Task<User> GetProfileById(int Id);
     }
 }

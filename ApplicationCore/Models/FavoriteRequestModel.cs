@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Models
 {
-    class CastDetailResponseModel
+    public class FavoriteRequestModel
     {
+        public int UserId { get; set; }
+
+        public int MovieId { get; set; }
     }
 }

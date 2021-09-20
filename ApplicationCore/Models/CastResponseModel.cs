@@ -14,5 +14,7 @@ namespace ApplicationCore.Models
         public string TmdbUrl { get; set; }
         public string ProfilePath { get; set; }
         public string character { get; set; }
+
+        public List<MovieDetailResponseModel> movieDetailResponseModels { get; set; }
     }
 }
