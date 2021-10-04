@@ -1,0 +1,80 @@
+<p>movie-details works!</p>
+
+<div class="container-fluid">
+    <div class="bg-image" style=" background-image: url('{{moviedetails.backdropUrl}}')">
+    <div class="row" >
+        <div class="col-2">
+            <div class="card mb-4">
+                <img src="{{moviedetails.posterUrl}}" class="img-fluid">
+            </div>
+          
+        </div>
+        <div class="col ">
+            <ul class="list-group-flush">
+                <li class="list-group-item font-weight-bold h2">{{moviedetails.title}}</li>
+                <li class="list-group-item">  
+                    <div *ngFor="let genre of moviedetails.genres" class="btn-group btn-group-sm mr-2 " role="group" >
+                        <button type="button" class="btn btn-secondary">{{genre.name}}</button>
+                    </div>
+                </li> 
+                <li class="list-group-item">
+                    <span [ngClass]="{
+                        'class =badge badge-success' : moviedetails.rating>8,
+                        'class =badge badge-primary' : moviedetails.rating>7 && moviedetails.rating<=8,
+                        'class =badge badge-warning' : moviedetails.rating>6 && moviedetails.rating<=7,
+                        'class =badge badge-danger' : moviedetails.rating<=6 }"  rounded-pill>{{moviedetails.rating| number:'1.0-4'}}</span>
+                    
+                </li>
+                <li class="list-group-item">{{moviedetails.overview}}</li>  
+            </ul>
+        </div>
+        <div class="col-md-2 mt-4">
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                    REVIEW
+                </button>
+                <button type="button" class="list-group-item list-group-item-action">TRAILER</button>
+                <button type="button" class="list-group-item list-group-item-action">BUY {{moviedetails.price}}</button>
+                <button type="button" class="list-group-item list-group-item-action">WATCH MOVIE</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="row row-cols-3">
+        <div class="col">
+            <h4>MOVIE FACTS</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Release Date
+                    <span class="badge badge-dark" rounded-pill>{{moviedetails.releaseDate| date:"MM/dd/yyyy"}}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Run Time
+                    <span class="badge badge-dark" rounded-pill>{{moviedetails.runTime}}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Box Office
+                    <span class="badge badge-dark" rounded-pill>{{moviedetails.revenue | currency : "USD"}}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Budget
+                    <span class="badge badge-dark" rounded-pill>{{moviedetails.budget| currency : "USD"}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6 offset-1">
+            <h4>CAST</h4>
+            <div class="card border-0">
+                <div *ngFor="let cast of moviedetails.casts" >
+                    <ul class="list-group list-group-horizontal ">
+                        <li class="list-group-item col-1 "><a [routerLink] = "['/casts', cast.id]"><img src="{{cast.profilePath}}" class="img-fluid " /></a></li>
+                        <li class="list-group-item col-3 ">{{cast.name}}</li>
+                        <li class="list-group-item col-6 ">{{cast.character}}</li>
+                    </ul>
+                </div>   
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
